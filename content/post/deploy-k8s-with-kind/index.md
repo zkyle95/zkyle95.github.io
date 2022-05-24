@@ -14,9 +14,7 @@ tags:
     - Cloud Native
 ---
 
-# 部署k8s开发环境
-
-## 环境
+## 系统
 
 - OS: CentOS (any other Linux distrubite)
 - User: root
