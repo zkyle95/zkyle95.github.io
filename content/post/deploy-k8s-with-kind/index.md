@@ -1,7 +1,7 @@
 ---
 title: k8s本地开发环境部署
 description: Deploy kubernetes with kind locally. 
-slug: kubernetes
+slug: deploy-kubernetes-cluster-with-kind
 date: 2021-11-29 00:00:00+0000
 image: kubernetes.png
 categories:
