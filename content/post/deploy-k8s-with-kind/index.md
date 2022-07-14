@@ -7,11 +7,11 @@ image: kubernetes.png
 categories:
     - DevOps
 tags:
-    - DevOps
-    - kubernetes
+    - Kubernetes
     - Container
     - KIND
     - Cloud Native
+    - Linux
 ---
 
 ## 环境
