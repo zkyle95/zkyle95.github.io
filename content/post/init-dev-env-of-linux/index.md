@@ -22,8 +22,8 @@ tags:
 
 ```bash
 # specify default editor
-echo "alias ll='ls -lah'" > /etc/profile.d/common.sh
-echo "export EDITOR=/usr/bin/vim" > /etc/profile.d/common.sh
+echo "alias ll='ls -lah'" >> /etc/profile.d/common.sh
+echo "export EDITOR=/usr/bin/vim" >> /etc/profile.d/common.sh
 
 # config vim 
 cat <<EOF >> /etc/vim/vimrc
@@ -142,7 +142,7 @@ apt upgrade
   # start ssh-agent
   eval "$(ssh-agent -s)"
   
-  # start script, should be added into .bash_profile
+  # start script, which should be added into .bash_profile
   if [ -z "$SSH_AUTH_SOCK" ]; then
      # Check for a currently running instance of the agent
      RUNNING_AGENT="`ps -ax | grep 'ssh-agent -s' | grep -v grep | wc -l | tr -d '[:space:]'`"
