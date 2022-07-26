@@ -12,13 +12,14 @@ tags:
 
 > ***Note***
 >
-> This article is just a personal note for recording my common setting of every new developing host of linux. 
+> - This article is just a personal note for recording my common setting of every new developing host of linux. 
+> - Remember to source `/etc/profile` after specify any environment variables.
 
 > ***Principle***
 >
 > Set environment variables in `/etc/profile.d/{{app}}.sh`  if you want to use it of system wide, keep `.bashr_profile` or `.bashrc` simple. 
 
-## First
+## Beginning
 
 ```bash
 # specify default editor
@@ -36,20 +37,26 @@ EOF
 
 ## Update packages
 
-Set proxy for apt if needed. 
+- Set proxy for apt if needed. 
 
-```bash
-vim /etc/apt/apt.conf
-# Acquire::http::Proxy "http://USERNAME:PASSWORD@SERVER:PORT";
-# Acquire::https::Proxy "https://USERNAME:PASSWORD@SERVER:PORT";
+    ```bash
+    vim /etc/apt/apt.conf
+    # Acquire::http::Proxy "http://USERNAME:PASSWORD@SERVER:PORT";
+    # Acquire::https::Proxy "https://USERNAME:PASSWORD@SERVER:PORT";
+    ```
+    
+- Or change original repository to [mirror](https://www.debian.org/mirror/list) if needed
 
-apt update
-apt upgrade
-```
+- Update
+
+    ```bash
+    apt update
+    apt upgrade
+    ```
 
 ## User
 
-- New user
+- Init user
 
   ```bash
   # create home dir \w -m
@@ -57,7 +64,7 @@ apt upgrade
   passwd {user}
   ```
 
-- Shell
+- Specify the login shell
 
   ```bash
   # check what kind of shells had been installed
@@ -68,7 +75,7 @@ apt upgrade
   usermod -s /bin/bash {user}
   ```
   
-- Sudoer
+- Grant as sudoer
 
   ```bash
   # make sure the user is trusted
@@ -80,86 +87,87 @@ apt upgrade
   sudo -E curl -I https://www.google.com
   ```
   
-- Group
+- Add to group
 
-  Needed while running docker. 
+  > It's needed while running docker. 
 
   ```bash
   # add user to group
   usermod -a -G {group} {user}
   
-  # change the primary group of user 
+  # or change the primary group of user 
   usermod -g {group} {user}
   ```
 
 ## Network
 
-- Proxy
+- Set proxy enviroments
 
   ```bash
-  sudo cat <<EOF >> /etc/profile.d/proxy.sh
+  # /etc/profile.d/proxy.sh
   export http_proxy="http://{{username}}:{{passwd}}@{{host}}:{{port}}"
   export HTTP_PROXY=${http_proxy}
   # https_proxy, no_proxy etc.
-  EOF
   ```
-
-- Host
-
-  Set customed domain name for localhost or other host. 
   
+- Set customed domain name for localhost or other host
+
   ```bash
-  sudo cat <<EOF >> /etc/hosts
-  127.0.0.1 xxx.dev
-  EOF
+  echo "127.0.0.1 xxx.dev" >> /etc/hosts
   ```
 
 ## SSH
 
-- generate key
+- Generate key
 
   ```bash
   ssh-keygen
   ```
 
-- trust key
+- Trust keys of other hosts
 
   ```bash
   # get the public key of other trusted host
   echo "{{public_key}}" >> ~/.ssh/authorized_keys
   ```
 
-- config agent
+- Config agent
 
   For cloning git repository by ssh keys on host while developing in dev container with vscode. 
 
-  [how to config ssh-agent on linux](https://code.visualstudio.com/docs/remote/containers#_using-ssh-keys)
+  See official [how to config ssh-agent on linux](https://code.visualstudio.com/docs/remote/containers#_using-ssh-keys). 
   
-  ```bash
-  # add ssh key
-  ssh-add $HOME/.ssh/id_rsa
+  - Add start script to `.bashrc` to execute after logining
   
-  # start ssh-agent
-  eval "$(ssh-agent -s)"
-  
-  # start script, which should be added into .bash_profile
-  if [ -z "$SSH_AUTH_SOCK" ]; then
-     # Check for a currently running instance of the agent
-     RUNNING_AGENT="`ps -ax | grep 'ssh-agent -s' | grep -v grep | wc -l | tr -d '[:space:]'`"
-     if [ "$RUNNING_AGENT" = "0" ]; then
-          # Launch a new instance of the agent
-          ssh-agent -s &> $HOME/.ssh/ssh-agent
-     fi
-     eval `cat $HOME/.ssh/ssh-agent`
-  fi
-  
-  # test 
-  ssh-add 
-  ssh-add -l
-  echo $SSH_AUTH_SOCK
-  # there should be only one process
-  ps -ax | grep 'ssh-agent -s' | grep -v grep | wc -l
-  ```
+      ```bash
+      # start script, which should be added into .bash_profile
+      if [ -z "$SSH_AUTH_SOCK" ]; then
+         # Check for a currently running instance of the agent
+         RUNNING_AGENT="`ps -ax | grep 'ssh-agent -s' | grep -v grep | wc -l | tr -d '[:space:]'`"
+         if [ "$RUNNING_AGENT" = "0" ]; then
+              # Launch a new instance of the agent
+              ssh-agent -s &> $HOME/.ssh/ssh-agent
+         fi
+         eval `cat $HOME/.ssh/ssh-agent`
+      fi
+      ```
+      
+  - Add ssh key to agent
+    
+    
+      ```bash
+      ssh-add $HOME/.ssh/id_rsa
+      ```
+      
+  - Test
+    
+      ```bash
+      ssh-add -l
+      echo $SSH_AUTH_SOCK
+      
+      # there should be only one process
+      ps -fC ssh-agent
+      ```
 
 
 ## Prompt Shell

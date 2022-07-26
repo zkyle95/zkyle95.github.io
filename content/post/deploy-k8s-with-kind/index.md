@@ -18,7 +18,7 @@ tags:
 
 ### OS
 
-Debian Bullseye (or any other Linux distrubite)
+Debian Bullseye (or any other Linux distrubite with APT package management tool)
 
 ### 网络
 
@@ -32,7 +32,7 @@ Debian Bullseye (or any other Linux distrubite)
 - Proxy
 
     ```bash
-    # [Optional] Set proxy if the machine cannot acccess some needed resources
+    # [Optional] Set proxy if needed
     cat <<EOF >> ~/.bashrc
     export http_proxy="http://x.x.x.x:xxxx"
     export https_proxy="http://x.x.x.x:xxxx"
@@ -46,14 +46,14 @@ Debian Bullseye (or any other Linux distrubite)
 
 参考[官方指导](https://docs.docker.com/engine/install/debian/)， 使用`apt-get`安装最新的Docker CE版本
 
-- 更新已安装程序
+- **安装必要工具**
 
     ```bash
-    sudo apt-get update
-    sudo apt-get install ca-certificates curl gnupg lsb-release
+    sudo apt update
+    sudo apt install ca-certificates curl gnupg lsb-release
     ```
 
-- 添加Docker官方源
+- **添加包源**
 
     ```bash
     # load gpg key of docker official apt repo
@@ -64,19 +64,19 @@ Debian Bullseye (or any other Linux distrubite)
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     ```
 
-- 安装Docker相关应用
+- **安装**
 
     ```bash
-    sudo apt-get update
+    sudo apt update	
     # no docker-compose
-    sudo apt-get install docker-ce docker-ce-cli containerd.io
+    sudo apt install docker-ce docker-ce-cli containerd.io
     ```
 
-- 检查
+- **检查**
 
     ![docker_validation](docker_validation.png)
     
-- 配置（可选）
+- **配置**（可选）
 
     如果需要与非HTTPS镜像仓库交互，需要在daemon的[配置文件](https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file)中添加仓库地址
 
@@ -97,7 +97,7 @@ Debian Bullseye (or any other Linux distrubite)
 
 ### Golang
 
-- 下载
+- **下载**
 
     ```bash
     curl -SLO https://go.dev/dl/go1.18.4.linux-amd64.tar.gz
@@ -106,17 +106,16 @@ Debian Bullseye (or any other Linux distrubite)
     sudo ln -s /usr/local/go1.18.4 /usr/local/go
     ```
 
-- 环境变量
+- **环境变量**
 
     ```bash
-    sudo cat <<EOF >> /etc/profile.d/golang.sh
+    # /etc/profile.d/golang.sh
     export GOROOT="/usr/local/go"
     export GOPATH="/usr/local/gopath"
     export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
-    EOF
     ```
-
-- 检查
+    
+- **检查**
 
     ```bash
     go version
@@ -126,13 +125,13 @@ Debian Bullseye (or any other Linux distrubite)
 
 kind为k8s兴趣小组中的热门工具之一，能够快速部署轻量级的k8s集群，主要用于k8s相关的功能调试与CICD等场景
 
-- 安装
+- **安装**
 
     ```bash
     go install sigs.k8s.io/kind@latest
     ```
 
-- 配置集群
+- **配置集群**
 
     若考虑将集群用于长期测试，建议对集群进行定制。详细配置项可见[官方说明文档](https://kind.sigs.k8s.io/docs/user/configuration)
 
@@ -194,12 +193,12 @@ kind为k8s兴趣小组中的热门工具之一，能够快速部署轻量级的k
     - `registry.mirrors`为该插件内置的配置项，表示镜像仓库列表，其子项`localhost:5000`为新增的动态子配置项，代表指定的镜像仓库地址，默认格式为`host:port`。此处我们使用localhost代表镜像仓库名称，那么在k8s的相关yaml中的镜像地址都以localhost开头，例如`image: localhost:5000/alpine`
     - `endpoint = ["http://local-registry:5000"]`表示该镜像仓库实际访问地址，此示例中即我们启动的镜像仓库容器的名称和端口
 
-- 创建集群
+- **创建集群**
 
   > 如果执行环境中存在代理配置，需要添加免代理名单，将镜像仓库容器的名称和镜像仓库访问地址添加到`no_proxy`环境变量中，避免kind中的CRI访问镜像仓库容器时走代理
 
     ```bash
-    kind create cluster --config ./config.yaml
+    kind create cluster --config config.yaml
     ```
 
   > 此过程会拉取体积较大的容器镜像，需要等待一段时间
@@ -207,10 +206,10 @@ kind为k8s兴趣小组中的热门工具之一，能够快速部署轻量级的k
   kind在初始化集群过程中，会创建专用的容器网络`kind`。为了能够正常访问镜像仓库容器，需要将镜像仓库容器加入到此网络中
 
   ```bash
-  docker connect kind local-registry
+  docker network connect kind local-registry
   ```
 
-- 测试
+- **测试**
 
     + 本地开发环境上传镜像
     
@@ -223,19 +222,19 @@ kind为k8s兴趣小组中的热门工具之一，能够快速部署轻量级的k
     + 拉取镜像创建Pod
     
         ```bash
-        kubectl run tmp --rm --restart='Never' --wait --image="localhost:5000/alpine"
+        kubectl run tmp --rm -i --restart='Never' --wait --image="localhost:5000/alpine"
         ```
 
 ### kubectl
 
-- 安装
+- **安装**
 
     ```bash
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
     sudo mv kubectl /usr/local/bin/
     ```
 
-- 配置
+- **配置**
 
     > 使用kind创建集群时，如果系统中不存在kubeconfig文件，则会默认生成一份，否则累加新集群的配置
     
@@ -247,7 +246,7 @@ kind为k8s兴趣小组中的热门工具之一，能够快速部署轻量级的k
     echo $KUBECONFIG
     ```
     
-- [自动补全](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/)
+- [**自动补全**](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/)
 
     配置完成后需要重新运行bash
 
@@ -267,13 +266,13 @@ kind为k8s兴趣小组中的热门工具之一，能够快速部署轻量级的k
 
 [kubernetes/dashboard](https://github.com/kubernetes/dashboard)是k8s社区的官方UI项目，用于展示各种k8s对象的状态与详情，如果熟悉kubectl的CLI操作，则无需使用dashboard。此处通过安装dashboard验证新建的k8s集群的基本功能
 
-- 安装
+- **安装**
 
     ```bash
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
     ```
 
-- 访问
+- **访问**
 
     dashboard运行在集群内部，无法直接访问。在功能验证场景中，我们可以使用kubectl的`proxy`或者`port-forward`能力进行转发
     
@@ -295,22 +294,26 @@ kubectl create clusterrolebinding kube-admin --clusterrole cluster-admin --servi
 
 接下来获取该ServiceAccount的token
 
-    # 获取ServiceAccount用于存储token的secret名称
-    kubectl get sa default -nkube-system -ojsonpath='{.secrets[0].name}'
-    
-    # 从secret中获取token
-    kubectl get secret <secret_name> -nkube-system -ojsonpath='{.data.token}' | base64 -d
+```bash
+# 获取ServiceAccount用于存储token的secret名称
+kubectl get sa default -nkube-system -ojsonpath='{.secrets[0].name}'
+
+# 从secret中获取token
+kubectl get secret <secret_name> -nkube-system -ojsonpath='{.data.token}' | base64 -d
+```
 
 将获取的token配置给kubeconfig中默认的用户
 
-    # <token>通过上述命令获取
-    kubectl config set-credentials <user_name> --token=<token>
+```bash
+# <token>通过上述命令获取
+kubectl config set-credentials <user_name> --token=<token>
+```
 
 ### 外部访问
 
 由于kind实现机制，部署在kind集群中的应用与外部存在网络隔离，即使是**NodePort**类型的Service也无法从外部访问，需要借助其他代理手段
 
-- kubectl
+- **kubectl**
 
 	kubectl工具支持代理功能，但是仅适用于临时调试场景，无法稳定持续地运行
 
@@ -335,7 +338,7 @@ kubectl create clusterrolebinding kube-admin --clusterrole cluster-admin --servi
     
     启动转发后，通过指定的代理地址和端口即可访问
   
-- [socat](http://www.dest-unreach.org/socat/)
+- [**socat**](http://www.dest-unreach.org/socat/)
 
     基于socat的代理功能，转发通往容器网络内的请求
 
@@ -408,19 +411,24 @@ kubectl create clusterrolebinding kube-admin --clusterrole cluster-admin --servi
     docker run --rm -d --name dashboard-proxy --publish 0.0.0.0:8888:8888 --network kind alpine/socat -dd tcp-listen:8888,fork,reuseaddr tcp-connect:172.18.0.2:30382
     ```
 
-- ingress controller
+- **ingress controller**
 
     基于nodeport service + socat转发机制，使用ingress controller做反向代理
 
     + 安装
 
-    ```bash
-    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-    ```
-
+        ```bash
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+        
+        # add label ingress-ready=true to node for runing nginx pod
+        kubectl edit node {worker_node}
+        ```
+    
     + 启动ingress代理
-
-    ```bash
-    docker run --rm -d --name ingress-proxy --publish 0.0.0.0:9090:9090 --network kind alpine/socat -dd tcp-listen:9090,fork,reuseaddr tcp-connect:172.18.0.3:{ingress_nodeport_service_port}
-    ```
+    
+      > 若通过kind创建集群时已经配置80端口转发，则无需运行socat代理容器
+    
+        ```bash
+        docker run --rm -d --name ingress-proxy --publish 0.0.0.0:9090:9090 --network kind alpine/socat -dd tcp-listen:9090,fork,reuseaddr tcp-connect:172.18.0.3:{ingress_nodeport_service_port}
+        ```
 
