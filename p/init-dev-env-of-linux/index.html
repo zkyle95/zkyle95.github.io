@@ -1,0 +1,158 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Initializing development host of linux."><title>初始化linux开发环境</title><link rel=canonical href=https://blog.zkyle.com/p/init-dev-env-of-linux/><link rel=stylesheet href=/scss/style.min.fe253589db5a54c99fe6b16bfbaf0243d856d34f8c07f3534613b39ed043b738.css><meta property="og:title" content="初始化linux开发环境"><meta property="og:description" content="Initializing development host of linux."><meta property="og:url" content="https://blog.zkyle.com/p/init-dev-env-of-linux/"><meta property="og:site_name" content="zkyle's blog"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="Linux"><meta property="article:published_time" content="2021-12-20T00:00:00+00:00"><meta property="article:modified_time" content="2021-12-20T00:00:00+00:00"><meta property="og:image" content="https://blog.zkyle.com/p/init-dev-env-of-linux/linux.jpg"><meta name=twitter:site content="@KyleZhan2"><meta name=twitter:creator content="@KyleZhan2"><meta name=twitter:title content="初始化linux开发环境"><meta name=twitter:description content="Initializing development host of linux."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.zkyle.com/p/init-dev-env-of-linux/linux.jpg"><link rel="shortcut icon" href=/favicon.icon></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu5e3b56603fc6bc5f46131586a2ac920f_2429537_300x0_resize_box_3.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a>
+<span class=emoji>👾</span></figure><div class=site-meta><h1 class=site-name><a href=/>zkyle's blog</a></h1><h2 class=site-description>Personal blog of technical notes & life recording.</h2></div></header><ol class=social-menu><li><a href=https://github.com/zkyle95 target=_blank title=GitHub><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com/KyleZhan2 target=_blank title=Twitter><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg><span>Home</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg><span>Archives</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg><span>Search</span></a></li><li><a href=/links/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg><span>Links</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><span>暗色模式</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/init-dev-env-of-linux/><img src=/p/init-dev-env-of-linux/linux_hu3d03a01dcc18bc5be0e67db3d8d209a6_53723_800x0_resize_q75_box.jpg srcset="/p/init-dev-env-of-linux/linux_hu3d03a01dcc18bc5be0e67db3d8d209a6_53723_800x0_resize_q75_box.jpg 800w, /p/init-dev-env-of-linux/linux_hu3d03a01dcc18bc5be0e67db3d8d209a6_53723_1600x0_resize_q75_box.jpg 1600w" width=800 height=600 loading=lazy alt="Featured image of post 初始化linux开发环境"></a></div><div class=article-details><header class=article-category><a href=/categories/devops/ style=background-color:#2a9d8f;color:#fff>DevOps</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/init-dev-env-of-linux/>初始化linux开发环境</a></h2><h3 class=article-subtitle>Initializing development host of linux.</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Dec 20, 2021</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><blockquote><p><em><strong>Note</strong></em></p><ul><li>This article is just a personal note for recording my common setting of every new developing host of linux.</li><li>Remember to source <code>/etc/profile</code> after specify any environment variables.</li></ul></blockquote><blockquote><p><em><strong>Principle</strong></em></p><p>Set environment variables in <code>/etc/profile.d/{{app}}.sh</code> if you want to use it of system wide, keep <code>.bashr_profile</code> or <code>.bashrc</code> simple.</p></blockquote><h2 id=beginning>Beginning</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># specify default editor</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;alias ll=&#39;ls -lah&#39;&#34;</span> &gt;&gt; /etc/profile.d/common.sh
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;export EDITOR=/usr/bin/vim&#34;</span> &gt;&gt; /etc/profile.d/common.sh
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># config vim </span>
+</span></span><span class=line><span class=cl>cat <span class=s>&lt;&lt;EOF &gt;&gt; /etc/vim/vimrc
+</span></span></span><span class=line><span class=cl><span class=s>set tabstop=4
+</span></span></span><span class=line><span class=cl><span class=s>set shiftwidth=4
+</span></span></span><span class=line><span class=cl><span class=s>set autoindent
+</span></span></span><span class=line><span class=cl><span class=s>set smartindent
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=update-packages>Update packages</h2><ul><li><p>Set proxy for apt if needed.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>vim /etc/apt/apt.conf
+</span></span><span class=line><span class=cl><span class=c1># Acquire::http::Proxy &#34;http://USERNAME:PASSWORD@SERVER:PORT&#34;;</span>
+</span></span><span class=line><span class=cl><span class=c1># Acquire::https::Proxy &#34;https://USERNAME:PASSWORD@SERVER:PORT&#34;;</span>
+</span></span></code></pre></td></tr></table></div></div></li><li><p>Or change original repository to <a class=link href=https://www.debian.org/mirror/list target=_blank rel=noopener>mirror</a> if needed</p></li><li><p>Update</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>apt update
+</span></span><span class=line><span class=cl>apt upgrade
+</span></span></code></pre></td></tr></table></div></div></li></ul><h2 id=user>User</h2><ul><li><p>Init user</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># create home dir \w -m</span>
+</span></span><span class=line><span class=cl>useradd -m <span class=o>{</span>user<span class=o>}</span>
+</span></span><span class=line><span class=cl>passwd <span class=o>{</span>user<span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div></li><li><p>Specify the login shell</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># check what kind of shells had been installed</span>
+</span></span><span class=line><span class=cl>cat /etc/shells
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># make sure the default login shell of the user </span>
+</span></span><span class=line><span class=cl>grep <span class=o>{</span>user<span class=o>}</span> /etc/passwd
+</span></span><span class=line><span class=cl>usermod -s /bin/bash <span class=o>{</span>user<span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div></li><li><p>Grant as sudoer</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># make sure the user is trusted</span>
+</span></span><span class=line><span class=cl>visudo /etc/sudoers.d/<span class=o>{</span>user<span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=c1># insert config below into sudoers file</span>
+</span></span><span class=line><span class=cl><span class=c1># {user} ALL=(ALL:ALL) NOPASSWD: ALL</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># keep env \w -E for sudo commands</span>
+</span></span><span class=line><span class=cl>sudo -E curl -I https://www.google.com
+</span></span></code></pre></td></tr></table></div></div></li><li><p>Add to group</p><blockquote><p>It&rsquo;s needed while running docker.</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># add user to group</span>
+</span></span><span class=line><span class=cl>usermod -a -G <span class=o>{</span>group<span class=o>}</span> <span class=o>{</span>user<span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># or change the primary group of user </span>
+</span></span><span class=line><span class=cl>usermod -g <span class=o>{</span>group<span class=o>}</span> <span class=o>{</span>user<span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div></li></ul><h2 id=network>Network</h2><ul><li><p>Set proxy enviroments</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># /etc/profile.d/proxy.sh</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>http_proxy</span><span class=o>=</span><span class=s2>&#34;http://{{username}}:{{passwd}}@{{host}}:{{port}}&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>HTTP_PROXY</span><span class=o>=</span><span class=si>${</span><span class=nv>http_proxy</span><span class=si>}</span>
+</span></span><span class=line><span class=cl><span class=c1># https_proxy, no_proxy etc.</span>
+</span></span></code></pre></td></tr></table></div></div></li><li><p>Set customed domain name for localhost or other host</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;127.0.0.1 xxx.dev&#34;</span> &gt;&gt; /etc/hosts
+</span></span></code></pre></td></tr></table></div></div></li></ul><h2 id=ssh>SSH</h2><ul><li><p>Generate key</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-keygen
+</span></span></code></pre></td></tr></table></div></div></li><li><p>Trust keys of other hosts</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># get the public key of other trusted host</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;{{public_key}}&#34;</span> &gt;&gt; ~/.ssh/authorized_keys
+</span></span></code></pre></td></tr></table></div></div></li><li><p>Config agent</p><p>For cloning git repository by ssh keys on host while developing in dev container with vscode.</p><p>See official <a class=link href=https://code.visualstudio.com/docs/remote/containers#_using-ssh-keys target=_blank rel=noopener>how to config ssh-agent on linux</a>.</p><ul><li><p>Add start script to <code>.bashrc</code> to execute after logining</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># start script, which should be added into .bash_profile</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[</span> -z <span class=s2>&#34;</span><span class=nv>$SSH_AUTH_SOCK</span><span class=s2>&#34;</span> <span class=o>]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>   <span class=c1># Check for a currently running instance of the agent</span>
+</span></span><span class=line><span class=cl>   <span class=nv>RUNNING_AGENT</span><span class=o>=</span><span class=s2>&#34;`ps -ax | grep &#39;ssh-agent -s&#39; | grep -v grep | wc -l | tr -d &#39;[:space:]&#39;`&#34;</span>
+</span></span><span class=line><span class=cl>   <span class=k>if</span> <span class=o>[</span> <span class=s2>&#34;</span><span class=nv>$RUNNING_AGENT</span><span class=s2>&#34;</span> <span class=o>=</span> <span class=s2>&#34;0&#34;</span> <span class=o>]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=c1># Launch a new instance of the agent</span>
+</span></span><span class=line><span class=cl>        ssh-agent -s <span class=p>&amp;</span>&gt; <span class=nv>$HOME</span>/.ssh/ssh-agent
+</span></span><span class=line><span class=cl>   <span class=k>fi</span>
+</span></span><span class=line><span class=cl>   <span class=nb>eval</span> <span class=sb>`</span>cat <span class=nv>$HOME</span>/.ssh/ssh-agent<span class=sb>`</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div></li><li><p>Add ssh key to agent</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-add <span class=nv>$HOME</span>/.ssh/id_rsa
+</span></span></code></pre></td></tr></table></div></div></li><li><p>Test</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ssh-add -l
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=nv>$SSH_AUTH_SOCK</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># there should be only one process</span>
+</span></span><span class=line><span class=cl>ps -fC ssh-agent
+</span></span></code></pre></td></tr></table></div></div></li></ul></li></ul><h2 id=prompt-shell>Prompt Shell</h2><ul><li><p>Fonts</p><p>Use <a class=link href=https://www.nerdfonts.com/ target=_blank rel=noopener>Nerd Fonts</a> <strong>in terminal</strong>, which contains many icons. Recommoned <a class=link href=https://github.com/ryanoasis/nerd-fonts/releases target=_blank rel=noopener>Meslo LGM NF</a>.</p></li><li><p><a class=link href=https://ohmyposh.dev/ target=_blank rel=noopener>Oh My Posh</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># install (https://ohmyposh.dev/docs/installation/linux)</span>
+</span></span><span class=line><span class=cl>sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+</span></span><span class=line><span class=cl>sudo chmod +x /usr/local/bin/oh-my-posh
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># get themes</span>
+</span></span><span class=line><span class=cl>mkdir ~/.poshthemes
+</span></span><span class=line><span class=cl>wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
+</span></span><span class=line><span class=cl>unzip ~/.poshthemes/themes.zip -d ~/.poshthemes
+</span></span><span class=line><span class=cl>chmod u+rw ~/.poshthemes/*.omp.*
+</span></span><span class=line><span class=cl>rm ~/.poshthemes/themes.zip
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># setting </span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;eval &#34;$(oh-my-posh init bash)&#34;&#39;</span> &gt;&gt; ~/.bash_profile
+</span></span></code></pre></td></tr></table></div></div></li></ul></section><footer class=article-footer><section class=article-tags><a href=/tags/linux/>Linux</a></section><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/deploy-kubernetes-cluster-with-kind/><div class=article-image><img src=/p/deploy-kubernetes-cluster-with-kind/kubernetes.937afaf75136d519b7b05a971614a6a8_hubc3863c8f54807461b7e25617a07923f_516022_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post k8s本地开发环境部署" data-key=deploy-kubernetes-cluster-with-kind data-hash="md5-k3r691E21Rm3sFqXFhSmqA=="></div><div class=article-details><h2 class=article-title>k8s本地开发环境部署</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script type=application/javascript>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//zkyle.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2022 zkyle's blog</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.12.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#beginning>Beginning</a></li><li><a href=#update-packages>Update packages</a></li><li><a href=#user>User</a></li><li><a href=#network>Network</a></li><li><a href=#ssh>SSH</a></li><li><a href=#prompt-shell>Prompt Shell</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

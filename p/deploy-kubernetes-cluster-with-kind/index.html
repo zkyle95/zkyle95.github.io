@@ -1,0 +1,249 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Deploy kubernetes with kind locally."><title>k8s本地开发环境部署</title><link rel=canonical href=https://blog.zkyle.com/p/deploy-kubernetes-cluster-with-kind/><link rel=stylesheet href=/scss/style.min.fe253589db5a54c99fe6b16bfbaf0243d856d34f8c07f3534613b39ed043b738.css><meta property="og:title" content="k8s本地开发环境部署"><meta property="og:description" content="Deploy kubernetes with kind locally."><meta property="og:url" content="https://blog.zkyle.com/p/deploy-kubernetes-cluster-with-kind/"><meta property="og:site_name" content="zkyle's blog"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="Kubernetes"><meta property="article:tag" content="Container"><meta property="article:tag" content="KIND"><meta property="article:tag" content="Cloud Native"><meta property="article:tag" content="Linux"><meta property="article:published_time" content="2021-11-29T00:00:00+00:00"><meta property="article:modified_time" content="2021-11-29T00:00:00+00:00"><meta property="og:image" content="https://blog.zkyle.com/p/deploy-kubernetes-cluster-with-kind/kubernetes.png"><meta name=twitter:site content="@KyleZhan2"><meta name=twitter:creator content="@KyleZhan2"><meta name=twitter:title content="k8s本地开发环境部署"><meta name=twitter:description content="Deploy kubernetes with kind locally."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.zkyle.com/p/deploy-kubernetes-cluster-with-kind/kubernetes.png"><link rel="shortcut icon" href=/favicon.icon></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu5e3b56603fc6bc5f46131586a2ac920f_2429537_300x0_resize_box_3.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a>
+<span class=emoji>👾</span></figure><div class=site-meta><h1 class=site-name><a href=/>zkyle's blog</a></h1><h2 class=site-description>Personal blog of technical notes & life recording.</h2></div></header><ol class=social-menu><li><a href=https://github.com/zkyle95 target=_blank title=GitHub><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com/KyleZhan2 target=_blank title=Twitter><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg><span>Home</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg><span>Archives</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg><span>Search</span></a></li><li><a href=/links/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg><span>Links</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><span>暗色模式</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/deploy-kubernetes-cluster-with-kind/><img src=/p/deploy-kubernetes-cluster-with-kind/kubernetes_hubc3863c8f54807461b7e25617a07923f_516022_800x0_resize_box_3.png srcset="/p/deploy-kubernetes-cluster-with-kind/kubernetes_hubc3863c8f54807461b7e25617a07923f_516022_800x0_resize_box_3.png 800w, /p/deploy-kubernetes-cluster-with-kind/kubernetes_hubc3863c8f54807461b7e25617a07923f_516022_1600x0_resize_box_3.png 1600w" width=800 height=430 loading=lazy alt="Featured image of post k8s本地开发环境部署"></a></div><div class=article-details><header class=article-category><a href=/categories/devops/ style=background-color:#2a9d8f;color:#fff>DevOps</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/deploy-kubernetes-cluster-with-kind/>k8s本地开发环境部署</a></h2><h3 class=article-subtitle>Deploy kubernetes with kind locally.</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Nov 29, 2021</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>阅读时长: 4 分钟</time></div></footer></div></header><section class=article-content><h2 id=环境>环境</h2><h3 id=os>OS</h3><p>Debian Bullseye (or any other Linux distrubite with APT package management tool)</p><h3 id=网络>网络</h3><ul><li><p>DNS</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># [Optional] Update dns address if the machine is working in LAN </span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;nameserver 114.114.114.114&#34;</span> &gt;&gt; /etc/resolv.conf
+</span></span></code></pre></td></tr></table></div></div></li><li><p>Proxy</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># [Optional] Set proxy if needed</span>
+</span></span><span class=line><span class=cl>cat <span class=s>&lt;&lt;EOF &gt;&gt; ~/.bashrc
+</span></span></span><span class=line><span class=cl><span class=s>export http_proxy=&#34;http://x.x.x.x:xxxx&#34;
+</span></span></span><span class=line><span class=cl><span class=s>export https_proxy=&#34;http://x.x.x.x:xxxx&#34;
+</span></span></span><span class=line><span class=cl><span class=s>export no_proxy=&#34;127.0.0.1,localhost&#34;
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span></code></pre></td></tr></table></div></div></li></ul><h2 id=安装>安装</h2><h3 id=docker>Docker</h3><p>参考<a class=link href=https://docs.docker.com/engine/install/debian/ target=_blank rel=noopener>官方指导</a>， 使用<code>apt-get</code>安装最新的Docker CE版本</p><ul><li><p><strong>安装必要工具</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo apt update
+</span></span><span class=line><span class=cl>sudo apt install ca-certificates curl gnupg lsb-release
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>添加包源</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># load gpg key of docker official apt repo</span>
+</span></span><span class=line><span class=cl>sudo mkdir -p /etc/apt/keyrings
+</span></span><span class=line><span class=cl>curl -fsSL https://download.docker.com/linux/debian/gpg <span class=p>|</span> sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># add docker official apt repo</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;deb [arch=</span><span class=k>$(</span>dpkg --print-architecture<span class=k>)</span><span class=s2> signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian </span><span class=k>$(</span>lsb_release -cs<span class=k>)</span><span class=s2> stable&#34;</span> <span class=p>|</span> sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>安装</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo apt update	
+</span></span><span class=line><span class=cl><span class=c1># no docker-compose</span>
+</span></span><span class=line><span class=cl>sudo apt install docker-ce docker-ce-cli containerd.io
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>检查</strong></p><p><img src=/p/deploy-kubernetes-cluster-with-kind/docker_validation.png width=1212 height=850 srcset="/p/deploy-kubernetes-cluster-with-kind/docker_validation_hu76cf5a97836a4f0a5cc3f366aee09683_90943_480x0_resize_box_3.png 480w, /p/deploy-kubernetes-cluster-with-kind/docker_validation_hu76cf5a97836a4f0a5cc3f366aee09683_90943_1024x0_resize_box_3.png 1024w" loading=lazy alt=docker_validation class=gallery-image data-flex-grow=142 data-flex-basis=342px></p></li><li><p><strong>配置</strong>（可选）</p><p>如果需要与非HTTPS镜像仓库交互，需要在daemon的<a class=link href=https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file target=_blank rel=noopener>配置文件</a>中添加仓库地址</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=c1>// /etc/docker/daemon.json
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nt>&#34;insecure-registries&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>		<span class=s2>&#34;localhost:5000&#34;</span>
+</span></span><span class=line><span class=cl>	<span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后重启daemon服务</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo systemctl restart docker
+</span></span></code></pre></td></tr></table></div></div></li></ul><h3 id=golang>Golang</h3><ul><li><p><strong>下载</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>curl -SLO https://go.dev/dl/go1.18.4.linux-amd64.tar.gz
+</span></span><span class=line><span class=cl>tar -zxf go1.18.4.linux-amd64.tar.gz
+</span></span><span class=line><span class=cl>sudo mv go /usr/local/go1.18.4
+</span></span><span class=line><span class=cl>sudo ln -s /usr/local/go1.18.4 /usr/local/go
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>环境变量</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># /etc/profile.d/golang.sh</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>GOROOT</span><span class=o>=</span><span class=s2>&#34;/usr/local/go&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>GOPATH</span><span class=o>=</span><span class=s2>&#34;/usr/local/gopath&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>PATH</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$PATH</span><span class=s2>:</span><span class=nv>$GOROOT</span><span class=s2>/bin:</span><span class=nv>$GOPATH</span><span class=s2>/bin&#34;</span>
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>检查</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>go version
+</span></span></code></pre></td></tr></table></div></div></li></ul><h3 id=kindhttpskindsigsk8sio><a class=link href=https://kind.sigs.k8s.io/ target=_blank rel=noopener>kind</a></h3><p>kind为k8s兴趣小组中的热门工具之一，能够快速部署轻量级的k8s集群，主要用于k8s相关的功能调试与CICD等场景</p><ul><li><p><strong>安装</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>go install sigs.k8s.io/kind@latest
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>配置集群</strong></p><p>若考虑将集群用于长期测试，建议对集群进行定制。详细配置项可见<a class=link href=https://kind.sigs.k8s.io/docs/user/configuration target=_blank rel=noopener>官方说明文档</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Cluster</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>kind.x-k8s.io/v1alpha4</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>avalon</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>networking</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=c># specify the listen address if users want to acess outside the host</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>apiServerAddress</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;127.0.0.1&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>nodes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span>- <span class=nt>role</span><span class=p>:</span><span class=w> </span><span class=l>control-plane</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span>- <span class=nt>role</span><span class=p>:</span><span class=w> </span><span class=l>worker</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>extraMounts</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>hostPath</span><span class=p>:</span><span class=w> </span><span class=l>/path/to/share</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>containerPath</span><span class=p>:</span><span class=w> </span><span class=l>/data</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>extraPortMappings</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>hostPort</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c># config the container registry</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>containerdConfigPatches</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span>- <span class=p>|-</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>  [plugins.&#34;io.containerd.grpc.v1.cri&#34;.registry.mirrors.&#34;localhost:5000&#34;]
+</span></span></span><span class=line><span class=cl><span class=sd>    endpoint = [&#34;http://local-registry:5000&#34;]</span><span class=w>  
+</span></span></span></code></pre></td></tr></table></div></div><p>kind支持自定义镜像仓库地址，建议使用本地运行镜像仓库容器。启动镜像仓库容器时，需注意的配置如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>docker run -d --restart<span class=o>=</span>always -p 5000:5000 -v /mnt/registry:/var/lib/registry --name local-registry registry:2
+</span></span></code></pre></td></tr></table></div></div><ul><li><p><code>-p 127.0.0.1:5000:5000</code></p><p>映射容器内镜像仓库的监听端口到宿主机，保证能够在宿主机上直接上传镜像，然后在集群中拉取</p><blockquote><p>此处监听的是本地地址，如果需要从外部访问，可以修改为<code>5000:5000</code>，但是安全性会大大降低</p></blockquote></li><li><p><code>-v /mnt/registry:/var/lib/registry</code></p><p>挂载容器中存放镜像文件的目录（默认为<code>/var/lib/registry</code>）到宿主机上指定目录（如<code>/mnt/registry</code>），持久化存储的镜像文件</p></li></ul><p>镜像仓库容器运行后，即可配置集群</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Cluster</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>kind.x-k8s.io/v1alpha4</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>containerdConfigPatches</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span>- <span class=p>|-</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>    [plugins.&#34;io.containerd.grpc.v1.cri&#34;.registry.mirrors.&#34;localhost:5000&#34;]
+</span></span></span><span class=line><span class=cl><span class=sd>      endpoint = [&#34;http://local-registry:5000&#34;]</span><span class=w>    
+</span></span></span></code></pre></td></tr></table></div></div><p>配置项<code>containerdConfigPatches</code>的值表示将添加到containerd<a class=link href=https://github.com/containerd/cri/blob/master/docs/registry.md#configure-registry-tls-communication target=_blank rel=noopener>配置文件</a>中的内容，默认的配置文件路径为<code>/etc/containerd/config.toml</code></p><blockquote><p><code>crictl</code>和<code>kubectl</code>都会读取containerd的配置文件</p></blockquote><ul><li><code>plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5000"</code>表示使用名为<code>io.containerd.grpc.v1.cri</code>的插件，并设置该插件的<code>registry.mirrors."localhost:5000"</code>配置项；</li><li><code>registry.mirrors</code>为该插件内置的配置项，表示镜像仓库列表，其子项<code>localhost:5000</code>为新增的动态子配置项，代表指定的镜像仓库地址，默认格式为<code>host:port</code>。此处我们使用localhost代表镜像仓库名称，那么在k8s的相关yaml中的镜像地址都以localhost开头，例如<code>image: localhost:5000/alpine</code></li><li><code>endpoint = ["http://local-registry:5000"]</code>表示该镜像仓库实际访问地址，此示例中即我们启动的镜像仓库容器的名称和端口</li></ul></li><li><p><strong>创建集群</strong></p><blockquote><p>如果执行环境中存在代理配置，需要添加免代理名单，将镜像仓库容器的名称和镜像仓库访问地址添加到<code>no_proxy</code>环境变量中，避免kind中的CRI访问镜像仓库容器时走代理</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kind create cluster --config config.yaml
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>此过程会拉取体积较大的容器镜像，需要等待一段时间</p></blockquote><p>kind在初始化集群过程中，会创建专用的容器网络<code>kind</code>。为了能够正常访问镜像仓库容器，需要将镜像仓库容器加入到此网络中</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>docker network connect kind local-registry
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>测试</strong></p><ul><li><p>本地开发环境上传镜像</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 此处可使用镜像仓库容器所在的远程地址进行推送，或者配置hosts使用</span>
+</span></span><span class=line><span class=cl>docker tag alpine localhost:5000/alpine
+</span></span><span class=line><span class=cl>docker push localhost:5000/alpine
+</span></span></code></pre></td></tr></table></div></div></li><li><p>拉取镜像创建Pod</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl run tmp --rm -i --restart<span class=o>=</span><span class=s1>&#39;Never&#39;</span> --wait --image<span class=o>=</span><span class=s2>&#34;localhost:5000/alpine&#34;</span>
+</span></span></code></pre></td></tr></table></div></div></li></ul></li></ul><h3 id=kubectl>kubectl</h3><ul><li><p><strong>安装</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>curl -LO <span class=s2>&#34;https://dl.k8s.io/release/</span><span class=k>$(</span>curl -L -s https://dl.k8s.io/release/stable.txt<span class=k>)</span><span class=s2>/bin/linux/amd64/kubectl&#34;</span>
+</span></span><span class=line><span class=cl>sudo mv kubectl /usr/local/bin/
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>配置</strong></p><blockquote><p>使用kind创建集群时，如果系统中不存在kubeconfig文件，则会默认生成一份，否则累加新集群的配置</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl config view
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># check kubeconfig file</span>
+</span></span><span class=line><span class=cl>ll ~/.kube/config
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=nv>$KUBECONFIG</span>
+</span></span></code></pre></td></tr></table></div></div></li><li><p><a class=link href=https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/ target=_blank rel=noopener><strong>自动补全</strong></a></p><p>配置完成后需要重新运行bash</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl completion bash <span class=p>|</span> sudo tee /etc/bash_completion.d/kubectl &gt; /dev/null
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># \w alias</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;alias k=kubectl&#39;</span> &gt;&gt;~/.bashrc
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;complete -o default -F __start_kubectl k&#39;</span> &gt;&gt;~/.bashrc
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>exec</span> bash
+</span></span></code></pre></td></tr></table></div></div></li></ul><h2 id=配置>配置</h2><h3 id=dashboard-optional>Dashboard (Optional)</h3><p><a class=link href=https://github.com/kubernetes/dashboard target=_blank rel=noopener>kubernetes/dashboard</a>是k8s社区的官方UI项目，用于展示各种k8s对象的状态与详情，如果熟悉kubectl的CLI操作，则无需使用dashboard。此处通过安装dashboard验证新建的k8s集群的基本功能</p><ul><li><p><strong>安装</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>访问</strong></p><p>dashboard运行在集群内部，无法直接访问。在功能验证场景中，我们可以使用kubectl的<code>proxy</code>或者<code>port-forward</code>能力进行转发</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 可通过--address=x.x.x.x指定proxy监听的地址</span>
+</span></span><span class=line><span class=cl>kubectl proxy
+</span></span></code></pre></td></tr></table></div></div><p>最后通过转发地址 <code>http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/</code> 进行访问</p></li></ul><h3 id=权限>权限</h3><p>访问dashboard时，登录页面会要求指定访问Token或者包含Token的kubeconfig配置文件。建议选择集群中某个固定的ServiceAccount（例如<strong>kube-system</strong>下的<strong>default</strong>），绑定<strong>ClusterAdmin</strong>的ClusterRoleBinding，即可获取集群内所有资源的访问以及管理权限</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 赋予kube-system命名空间下的服务账户default cluster-admin的角色</span>
+</span></span><span class=line><span class=cl>kubectl create clusterrolebinding kube-admin --clusterrole cluster-admin --serviceaccount kube-system:default
+</span></span></code></pre></td></tr></table></div></div><p>接下来获取该ServiceAccount的token</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 获取ServiceAccount用于存储token的secret名称</span>
+</span></span><span class=line><span class=cl>kubectl get sa default -nkube-system -ojsonpath<span class=o>=</span><span class=s1>&#39;{.secrets[0].name}&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 从secret中获取token</span>
+</span></span><span class=line><span class=cl>kubectl get secret &lt;secret_name&gt; -nkube-system -ojsonpath<span class=o>=</span><span class=s1>&#39;{.data.token}&#39;</span> <span class=p>|</span> base64 -d
+</span></span></code></pre></td></tr></table></div></div><p>将获取的token配置给kubeconfig中默认的用户</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># &lt;token&gt;通过上述命令获取</span>
+</span></span><span class=line><span class=cl>kubectl config set-credentials &lt;user_name&gt; --token<span class=o>=</span>&lt;token&gt;
+</span></span></code></pre></td></tr></table></div></div><h3 id=外部访问>外部访问</h3><p>由于kind实现机制，部署在kind集群中的应用与外部存在网络隔离，即使是<strong>NodePort</strong>类型的Service也无法从外部访问，需要借助其他代理手段</p><ul><li><p><strong>kubectl</strong></p><p>kubectl工具支持代理功能，但是仅适用于临时调试场景，无法稳定持续地运行</p><ul><li>proxy</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl proxy --address &lt;external_address&gt;
+</span></span></code></pre></td></tr></table></div></div><p>启动proxy后，即可通过</p><p><code>http://&lt;external_address>/api/v1/namespaces/&lt;namespace>/services/&lt;protocol>:&lt;service>:&lt;path></code></p><p>格式的URL地址访问集群中的指定命名空间下的指定Service，并指定了访问路径</p><ul><li><p>port-forward</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl port-forward TYPE/NAME &lt;local_port&gt;:&lt;remote_port&gt;
+</span></span><span class=line><span class=cl>kubectl port-forward --address localhost,10.19.21.23 pod/mypod 8888:5000
+</span></span></code></pre></td></tr></table></div></div><p>启动转发后，通过指定的代理地址和端口即可访问</p></li></ul></li><li><p><a class=link href=http://www.dest-unreach.org/socat/ target=_blank rel=noopener><strong>socat</strong></a></p><p>基于socat的代理功能，转发通往容器网络内的请求</p><p>本方案能够持久稳定运行，缺点是每个对外发布的服务都需要启动对应的socat代理容器</p><ul><li>在k8s集群内创建<code>NodePort</code>类型的Service，使服务在kind容器网络内能够被自由访问</li><li>在宿主机上运行socat容器，指定基于kind容器网络运行，同时容器对宿主机映射容器内端口，做到转发功能</li></ul><blockquote><p><strong>About socat</strong></p><p><em>From <a class=link href=http://www.dest-unreach.org/socat/doc/README target=_blank rel=noopener>README</a></em></p><p><em>socat is a relay for bidirectional data transfer between two independent data</em>
+<em>channels. Each of these data channels may be a file, pipe, device (serial line</em>
+<em>etc. or a pseudo terminal), a socket (UNIX, IP4, IP6 - raw, UDP, TCP), an</em>
+<em>SSL socket, proxy CONNECT connection, a file descriptor (stdin etc.), the GNU</em>
+<em>line editor (readline), a program, or a combination of two of these.</em>
+<em>These modes include generation of &ldquo;listening&rdquo; sockets, named pipes, and pseudo</em>
+<em>terminals.</em></p><p><em>socat can be used, e.g., as TCP port forwarder (one-shot or daemon), as an</em>
+<em>external socksifier, for attacking weak firewalls, as a shell interface to UNIX</em>
+<em>sockets, IP6 relay, for redirecting TCP oriented programs to a serial line, to</em>
+<em>logically connect serial lines on different computers, or to establish a</em>
+<em>relatively secure environment (su and chroot) for running client or server</em>
+<em>shell scripts with network connections.</em></p></blockquote><p>socat运行配置如下</p><ul><li><p>docker run参数</p><ul><li><p><code>--network kind</code></p><p>配置集群运行的容器网络</p></li><li><p><code>--publish &lt;host_ip>:&lt;host_port>:&lt;container_port></code></p><p>发布端口，将容器内监听的端口映射到宿主机上，地址为外部访问时使用的IP地址</p></li></ul></li><li><p>socat运行参数</p><ul><li><p><code>-dd</code></p><p>即<code>-d -d</code>，打印致命、错误、警告以及提示信息</p></li><li><p><code>tcp-listen:&lt;port>,fork,reuseaddr</code></p><ul><li>指定socat监听的本机端口</li><li><strong><a class=link href=http://www.dest-unreach.org/socat/doc/socat.html#OPTION_FORK target=_blank rel=noopener>fork</a></strong>：通过子进程处理新建的连接</li><li><strong><a class=link href=http://www.dest-unreach.org/socat/doc/socat.html#OPTION_REUSEADDR target=_blank rel=noopener>reuseaddr</a></strong>：允许其他socket绑定此地址，即使socat已经绑定了相关端口:question:</li></ul></li><li><p><code>tcp-connect:&lt;service_host>:&lt;service_port></code></p><p>指定转发后端的地址和端口，即从socat容器内访问目标Service的地址</p><ul><li>对于NodePort类型的Service来说，通过其所在的集群中的任意节点都能访问到它，故此处使用master节点在kind容器网络中分配到的IP地址。由于socat容器也使用了此容器网络，故网络上可到达</li><li>master节点上转发到Service的端口，由k8s动态分配，通过查询Service的命令即可获得</li></ul></li></ul></li></ul><p>综上，运行socat代理容器的命令为</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># port为任意未监听的端口</span>
+</span></span><span class=line><span class=cl>docker run --rm -d --name kind-proxy-&lt;port&gt; <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>--publish &lt;host&gt;:&lt;port&gt;:&lt;port&gt; --network kind <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>alpine/socat -dd <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>tcp-listen:&lt;port&gt;,fork,reuseaddr <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>tcp-connect:&lt;kind_node_ip&gt;:&lt;service_port&gt;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># e.g.</span>
+</span></span><span class=line><span class=cl>docker run --rm -d --name dashboard-proxy --publish 0.0.0.0:8888:8888 --network kind alpine/socat -dd tcp-listen:8888,fork,reuseaddr tcp-connect:172.18.0.2:30382
+</span></span></code></pre></td></tr></table></div></div></li><li><p><strong>ingress controller</strong></p><p>基于nodeport service + socat转发机制，使用ingress controller做反向代理</p><ul><li><p>安装</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># add label ingress-ready=true to node for runing nginx pod</span>
+</span></span><span class=line><span class=cl>kubectl edit node <span class=o>{</span>worker_node<span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div></li><li><p>启动ingress代理</p><blockquote><p>若通过kind创建集群时已经配置80端口转发，则无需运行socat代理容器</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>docker run --rm -d --name ingress-proxy --publish 0.0.0.0:9090:9090 --network kind alpine/socat -dd tcp-listen:9090,fork,reuseaddr tcp-connect:172.18.0.3:<span class=o>{</span>ingress_nodeport_service_port<span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div></li></ul></li></ul></section><footer class=article-footer><section class=article-tags><a href=/tags/kubernetes/>Kubernetes</a>
+<a href=/tags/container/>Container</a>
+<a href=/tags/kind/>KIND</a>
+<a href=/tags/cloud-native/>Cloud Native</a>
+<a href=/tags/linux/>Linux</a></section><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/init-dev-env-of-linux/><div class=article-image><img src=/p/init-dev-env-of-linux/linux.6dbe88032a1b3d20faa0122eb58df3a4_hu3d03a01dcc18bc5be0e67db3d8d209a6_53723_250x150_fill_q75_box_smart1.jpg width=250 height=150 loading=lazy alt="Featured image of post 初始化linux开发环境" data-key=init-dev-env-of-linux data-hash="md5-bb6IAyobPSD6oBIutY3zpA=="></div><div class=article-details><h2 class=article-title>初始化linux开发环境</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script type=application/javascript>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//zkyle.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2022 zkyle's blog</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.12.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#环境>环境</a><ol><li><a href=#os>OS</a></li><li><a href=#网络>网络</a></li></ol></li><li><a href=#安装>安装</a><ol><li><a href=#docker>Docker</a></li><li><a href=#golang>Golang</a></li><li><a href=#kindhttpskindsigsk8sio><a href=https://kind.sigs.k8s.io/>kind</a></a></li><li><a href=#kubectl>kubectl</a></li></ol></li><li><a href=#配置>配置</a><ol><li><a href=#dashboard-optional>Dashboard (Optional)</a></li><li><a href=#权限>权限</a></li><li><a href=#外部访问>外部访问</a></li></ol></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
