@@ -1,4 +1,26 @@
 baseURL = 'https://blog.zkyle.com'
 languageCode = 'en-us'
 title = "zkyle's blog"
-theme = 'ananke'
+theme = 'paper'
+
+disqusShortname = 'zkyle'
+
+[params]
+  # color style
+  color = 'linen'                           # linen, wheat, gray, light
+
+  # header social icons
+  twitter = 'KyleZhan2'               # twitter.com/YOUR_TWITTER_ID
+  github = 'zkyle95'                 # github.com/YOUR_GITHUB_ID
+  rss = true                                # show rss icon
+
+  # home page profile
+  avatar = 'zkyle95@outlook.com'                 # gravatar email or image url
+  name = 'zkyle'
+  bio = 'Just go to the dock and get some fries. '
+
+  # misc
+  disableHLJS = true                        # disable highlight.js
+  monoDarkIcon = true                       # show monochrome dark mode icon
+  gravatarCdn = 'https://cdn.v2ex.com/gravatar/'         # e.g. 'https://cdn.v2ex.com/gravatar/'
+  # graphCommentId = "YOUR_GRAPH_COMMENT_ID"  # use graph comment (disqus alternative)

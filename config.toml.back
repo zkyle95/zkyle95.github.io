@@ -1,0 +1,4 @@
+baseURL = 'https://blog.zkyle.com'
+languageCode = 'en-us'
+title = "zkyle's blog"
+theme = 'ananke'
