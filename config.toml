@@ -1,6 +1,6 @@
 baseURL = 'https://blog.zkyle.com'
 languageCode = 'en-us'
-title = "zkyle's blog"
+title = "Kyle's blog"
 theme = 'paper'
 
 disqusShortname = 'zkyle'
@@ -16,7 +16,7 @@ disqusShortname = 'zkyle'
 
   # home page profile
   avatar = 'zkyle95@outlook.com'                 # gravatar email or image url
-  name = 'zkyle'
+  name = '凯'
   bio = 'Just go to the dock and get some fries. '
 
   # misc
@@ -24,3 +24,30 @@ disqusShortname = 'zkyle'
   monoDarkIcon = true                       # show monochrome dark mode icon
   gravatarCdn = 'https://cdn.v2ex.com/gravatar/'         # e.g. 'https://cdn.v2ex.com/gravatar/'
   # graphCommentId = "YOUR_GRAPH_COMMENT_ID"  # use graph comment (disqus alternative)
+
+[privacy]
+
+  [privacy.vimeo]
+    disabled = false
+    simple = true
+
+  [privacy.twitter]
+    disabled = false
+    enableDNT = true
+    simple = true
+
+  [privacy.instagram]
+    disabled = false
+    simple = true
+
+  [privacy.youtube]
+    disabled = false
+    privacyEnhanced = true
+
+[services]
+
+  [services.instagram]
+    disableInlineCSS = true
+
+  [services.twitter]
+    disableInlineCSS = true
