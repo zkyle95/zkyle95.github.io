@@ -432,3 +432,76 @@ kubectl config set-credentials <user_name> --token=<token>
         docker run --rm -d --name ingress-proxy --publish 0.0.0.0:9090:9090 --network kind alpine/socat -dd tcp-listen:9090,fork,reuseaddr tcp-connect:172.18.0.3:{ingress_nodeport_service_port}
         ```
 
+## 验证
+
+### 部署测试服务
+
+部署一个GCP用于e2e测试的echoserver
+
+[参考](https://github.com/Kong/kubernetes-ingress-controller/blob/main/deploy/manifests/dummy-application.yaml)
+
+```yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-svc
+  template:
+    metadata:
+      labels:
+        app: http-svc
+    spec:
+      containers:
+      - name: http-svc
+        image: gcr.io/google_containers/echoserver:1.8
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-svc
+  labels:
+    app: http-svc
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: http-svc
+```
+
+### 验证
+
+```bash
+# replace avalone-worker to the name of node container
+docker exec avalon-worker curl localhost:{node_port}
+```
+
+
